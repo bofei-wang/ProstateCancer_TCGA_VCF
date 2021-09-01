@@ -146,14 +146,14 @@ def count_chrom(vcfdir):
     return info
     
 if __name__=='__main__':    
-    vcfdir = sys.argv[1] #directory of input file
-    outdirdir = sys.argv[2] #directory of output file
-    gtfdir = sys.argv[3] #directory of reference file
-    cores = int(sys.argv[4]) #number of cores to be used
-##    vcfdir = input("vcf directory:")
-##    outdir = input("output directory:")
-##    gtfdir = input("gtf file:")
-##    cores = int(input("number of cores:"))
+##    vcfdir = sys.argv[1] #directory of input file
+##    outdirdir = sys.argv[2] #directory of output file
+##    gtfdir = sys.argv[3] #directory of reference file
+##    cores = int(sys.argv[4]) #number of cores to be used
+    vcfdir = input("vcf directory:")
+    outdir = input("output directory:")
+    gtfdir = input("gtf file:")
+    cores = int(input("number of cores:"))
     vcfs=os.listdir(vcfdir)
     vcfs=[value for value in vcfs if value.endswith('.vcf')] #remove non-vcf files under vcfdir
     (refpath, gtfname) = os.path.split(gtfdir)
@@ -199,7 +199,7 @@ if __name__=='__main__':
             header1.append('change_type1')
             header1.append('AAchange\n')
             header1=",".join(header1)
-            f2=open(filename+'_'+csv_name[i],'a')
+            f2=open(outdir+filename+'_'+csv_name[i],'a')
             f2.write(header1)
             f1.close()
             f2.close()

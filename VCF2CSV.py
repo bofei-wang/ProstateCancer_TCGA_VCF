@@ -8,7 +8,7 @@ def writecsv(inputvcf):
     chr_start = time.time()
     vcf_reader = vcf.Reader(open(inputvcf,'r'))
     outfile_name=[]
-    col_name=[['var_index','chrom','left','right','ref_seq','var_seq1','var_seq2','count1','count2','genotype','var_score','gene_name','where_in_transcript']]#,'ID'
+    col_name=[['var_index','chrom','left','right','ref_seq','var_seq1','var_seq2','count1','count2','var_score','gene_name','where_in_transcript']]#,'ID''genotype',
     index=[]
     chrom=[]
     left=[]
@@ -29,7 +29,7 @@ def writecsv(inputvcf):
         names['%s' %''.join([char for char in record.samples[i].sample.lower() if char.isalnum()])]=[]
         names['count1%s' %i]=[]
         names['count2%s' %i]=[]
-        names['GT%s' %i]=[]  ################################     new
+        #names['GT%s' %i]=[]  ################################     new
         sample_temps.append(''.join([char for char in record.samples[i].sample if char.isalnum()]))
         sample_names.append(''.join([char for char in record.samples[i].sample.lower() if char.isalnum()]))
     vcf_reader = vcf.Reader(open(inputvcf,'r'))
@@ -91,8 +91,8 @@ def writecsv(inputvcf):
                     index[i]=[str(index[i])]
                     right[i]=[str(right[i]+len(ref[i]))]
 
-                    for j in range(0,len(record.samples)):  ##############################################   This is new
-                        eval('GT'+str(j)).append([",".join(eval(sample_names[j])[i][0].split('/'))])
+                    #for j in range(0,len(record.samples)):  ##############################################   This is new
+                     #   eval('GT'+str(j)).append([",".join(eval(sample_names[j])[i][0].split('/'))])
                     
                     if('BCOUNT' in tags[0]):
                         pos1=base_pool.index(alt[i])
@@ -116,9 +116,9 @@ def writecsv(inputvcf):
                     else:
                         break                   
                     for j in range(0,len(record.samples)):
-                        eval('list0'+str(j))[i]= index[i]+chrom[i]+ left[i]+ right[i]+ ref[i]+ alt[i]+alt2[i]+eval('count1'+str(j))[i]+eval('count2'+str(j))[i]+eval('GT'+str(j))[i]+score[i]#+normal[i]+ID[i]
+                        eval('list0'+str(j))[i]= index[i]+chrom[i]+ left[i]+ right[i]+ ref[i]+ alt[i]+alt2[i]+eval('count1'+str(j))[i]+eval('count2'+str(j))[i]+score[i]#+normal[i]+ID[i]+eval('GT'+str(j))[i]
                         #eval('temp'+str(j))[i]=eval('list0'+str(j))[i]
-                        eval('temp'+str(j))[i]= index[i]+chrom[i]+ left[i]+ right[i]+ ref[i]+ alt[i]+alt2[i]+eval('count1'+str(j))[i]+eval('count2'+str(j))[i]+eval('GT'+str(j))[i]+score[i]
+                        eval('temp'+str(j))[i]= index[i]+chrom[i]+ left[i]+ right[i]+ ref[i]+ alt[i]+alt2[i]+eval('count1'+str(j))[i]+eval('count2'+str(j))[i]+score[i]
 
     for p in range(0,len(record.samples)):  
         for ele in eval('temp'+str(p)):
