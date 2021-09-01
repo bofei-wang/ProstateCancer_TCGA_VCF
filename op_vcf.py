@@ -1,11 +1,11 @@
 from parse_VCF import vcf_func
 from VCF2CSV import writecsv
-from functools import partial
+#from functools import partial
 import csv
 import vcf
 import gc
 import time
-import sys
+#import sys
 import os
 import xlwt
 from xlutils.copy import copy
@@ -23,16 +23,6 @@ def writeOMI(infile,outfile,newfile):
     for row in rows:
         for key in infile:
             if (row[1]==infile[key][0] and row[2]==str(key)):               
-##                for i in range(len(infile[key][1])):
-##                    row.insert(2,infile[key][1][i])
-##                    row.append(infile[key][2][i])
-##                    row.append(infile[key][3][i])
-##                    #row.append(infile[key][4][i])
-##                    writer.writerow(row)
-##                    del row[2]
-##                    #del row[-3]
-##                    del row[-2]
-##                    del row[-1]
                 row.append(infile[key][1])
                 row.append(infile[key][2])
                 row.append(infile[key][3])
@@ -156,12 +146,14 @@ def count_chrom(vcfdir):
     return info
     
 if __name__=='__main__':    
-    #vcfdir = sys.argv[1] #directory of input file
-    #gtfdir = sys.argv[2] #directory of ref file
-    #cores = int(sys.argv[3]) #number of cores to be used
-    vcfdir = input("vcf directory:")
-    gtfdir = input("gtf directory:")
-    cores = int(input("number of cores:"))
+    vcfdir = sys.argv[1] #directory of input file
+    outdirdir = sys.argv[2] #directory of output file
+    gtfdir = sys.argv[3] #directory of reference file
+    cores = int(sys.argv[4]) #number of cores to be used
+##    vcfdir = input("vcf directory:")
+##    outdir = input("output directory:")
+##    gtfdir = input("gtf file:")
+##    cores = int(input("number of cores:"))
     vcfs=os.listdir(vcfdir)
     vcfs=[value for value in vcfs if value.endswith('.vcf')] #remove non-vcf files under vcfdir
     (refpath, gtfname) = os.path.split(gtfdir)
@@ -227,12 +219,12 @@ if __name__=='__main__':
         time5=time.time()
         if (len(csv_name) < cores):
             for j in range(0,len(csv_name)):
-                pool_list=[pool.apply_async(writeOMI,(result2[i],csv_name[j],filename+'_'+csv_name[j],)) for i in range(len(info[0]))] 
+                pool_list=[pool.apply_async(writeOMI,(result2[i],csv_name[j],outdir+filename+'_'+csv_name[j],)) for i in range(len(info[0]))] 
         else:
             result=result2[0].copy()
             for j in range(1,len(result2)):
                 result.update(result2[j])
-            pool_list=[pool.apply_async(writeOMI,(result,csv_name[k],filename+'_'+csv_name[k],)) for k in range(len(csv_name))] 
+            pool_list=[pool.apply_async(writeOMI,(result,csv_name[k],outdir+filename+'_'+csv_name[k],)) for k in range(len(csv_name))] 
         pool.close()
         pool.join()
         time6=time.time()-time5
