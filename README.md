@@ -15,3 +15,8 @@ gsv_count_subject.py takes a list of OMI files and count for each variants, the 
 (1) tumor directory:full path to all tumor OMI files.
 (2) tumor directory:full path to all normal OMI files. It could be the same as tumor directory.
 (3) output directory: folder to store result file. The file is named as sub_count_dist.csv
+
+provean.py takes nonsynonymous variants and generate sequences files and variation files for PROVEAN predictions. It takes 3 parameters as follows:
+(1) nonsynonymous files: CSV file for containing all nonsynonymous variants.
+(2) AA seq path: folder to store all amino acid sequences.
+(3) AA var path: folder to store all amino acid variations.
