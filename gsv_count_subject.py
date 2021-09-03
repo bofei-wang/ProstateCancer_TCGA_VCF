@@ -7,6 +7,8 @@ Created on Wed May 19 09:48:00 2021
 import numpy as np
 import os
 import pandas as pd
+import argparse
+
 def subject_count(tumordir,normaldir,outdir):
     #tumordir="D:\\Personal materials\\PhD\\Oncominer\\Data\\PRODOMI\\OMI_PROD"
     #normaldir="D:\\Personal materials\\PhD\\Oncominer\\Data\\PRODOMI\\OMI_NORMAL"
@@ -194,11 +196,17 @@ def subject_count(tumordir,normaldir,outdir):
 
 
 if __name__=='__main__':    
-    tumordir = sys.argv[1] #directory of tumor OMI file
-    normaldir = sys.argv[2] #directory of normal OMI file
-    outdir = sys.argv[3]
     #tumordir=input("directory of tumor OMI file:")
     #normaldir=input("directory of normal OMI file:")
     #outdir=input("directory of output file:")
+    parser = argparse.ArgumentParser(description='count subjects for each variant')
+    parser.add_argument('-t', '--input_dir', metavar="TUMORDIR", dest='tumor', required=True, help='Required: Directory to all tumor OMI files.')
+    parser.add_argument('-o', '--out_dir', metavar="DIRNAME", dest='outdir', required=True, help='Required: Name of output directory to store result file.')
+    parser.add_argument('-n', '--input_dir', metavar="NORMALDIR", dest='normal', required=True, help='Required: Directory to all normal OMI files.')
+    args = parser.parse_args()
+
+    tumordir = args.tumor
+    normaldir = args.normal
+    outdir = args.outdir
     subject_count(tumordir,normaldir,outdir)
     

@@ -11,7 +11,9 @@ import xlwt
 from xlutils.copy import copy
 from xlrd import open_workbook
 import multiprocessing
+import argparse
 #import resource
+
 
 #Function combines all information and writes an OMI file
 def writeOMI(infile,outfile,newfile):    
@@ -146,14 +148,22 @@ def count_chrom(vcfdir):
     return info
     
 if __name__=='__main__':    
-##    vcfdir = sys.argv[1] #directory of input file
-##    outdirdir = sys.argv[2] #directory of output file
-##    gtfdir = sys.argv[3] #directory of reference file
-##    cores = int(sys.argv[4]) #number of cores to be used
-    vcfdir = input("vcf directory:")
-    outdir = input("output directory:")
-    gtfdir = input("gtf file:")
-    cores = int(input("number of cores:"))
+    #vcfdir = input("vcf directory:")
+    #outdir = input("output directory:")
+    #gtfdir = input("gtf file:")
+    #cores = int(input("number of cores:"))
+    parser = argparse.ArgumentParser(description='Process VCF files to generate OMI files')
+    parser.add_argument('-i', '--input_dir', metavar="DIRNAME", dest='vcf_dir', required=True, help='Required: Input directory for all VCF files.')
+    parser.add_argument('-o', '--out_dir', metavar="DIRNAME", dest='outdir', required=True, help='Required: Name of output directory to store aa sequence.')
+    parser.add_argument('-f', '--ref_flat', metavar="ref_flat", dest='ref_flat', required=True, help='Required: Reference genomic field used to identify gene region,including path.')
+    parser.add_argument('-c', '--num_cores', metavar="NUMCORES", dest='cores', type=int,default=3)
+    args = parser.parse_args()
+
+    vcfdir = args.vcf_dir
+    outdir = args.outdir
+    cores = args.cores
+    gtfdir = args.ref_flat
+    
     vcfs=os.listdir(vcfdir)
     vcfs=[value for value in vcfs if value.endswith('.vcf')] #remove non-vcf files under vcfdir
     (refpath, gtfname) = os.path.split(gtfdir)

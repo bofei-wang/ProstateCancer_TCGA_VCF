@@ -14,7 +14,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import time
 import csv
-
+import argparse
 
 #variants=[value for value in allfiles if value.endswith('.txt')] 
 
@@ -30,7 +30,7 @@ import csv
 #content = response.content.decode("UTF-8", "ignore")
 
 ####-------------------------------------another version---------------------------------------------
-def fathmm(omifile,fatout):
+def fathmm(omifile,fatout,build='hg38',sleeptime=60):
     omi = pd.read_csv(omifile)
     directory,name=os.path.split(omifile)
     name=name.split(".")[0]
@@ -48,7 +48,6 @@ def fathmm(omifile,fatout):
     temp['left']=temp['left'].apply(lambda x:str(x))
     temp=temp.drop_duplicates()
     fathmm=temp.apply(lambda x:x['chrom']+','+ x['left']+','+ x['ref_seq']+','+ x['alt'],axis=1) 
-    #pd.DataFrame(fathmm).to_csv(fathmminput_dir+filename+".txt",sep="\t",index=False,header=None)
     del temp,i,alt,chrom,omi
     
     
@@ -60,11 +59,11 @@ def fathmm(omifile,fatout):
     #browser.get_current_form().print_summary()
     #browser["batch"]=lines
     browser["batch"]='\n'.join(fathmm.tolist())
-    browser["hg38"]="hg38"
-    #browser.launch_browser()
-    #browser.get_current_form().print_summary()
+    if build=='hg38':
+        browser["hg38"]="hg38"
+    
     response = browser.submit_selected()
-    time.sleep(20)
+    time.sleep(sleeptime)
     #print(response.text)
     browser.get_url()
     temp=response.text.split("session=")
@@ -91,12 +90,32 @@ def fathmm(omifile,fatout):
     return
    
 if __name__=='__main__':   
-    omifile = input("OMI file:")
-    outdir = input("Output directory:")
-    fathmm(omifile,outdir)  
+    parser = argparse.ArgumentParser(description='prepare for FATHMM submission and parse results')
+    parser.add_argument('-i', '--input_file', metavar="FILENAME", dest='omi', required=True, help='Required: Input OMI file.')
+    parser.add_argument('-o', '--output_dir', metavar="DIRNAME", dest='outdir', required=True, help='Required: Name of output directory to store results.')
+    parser.add_argument('-r', '--reference_build', metavar="ref_build", dest='ref', default='hg38', help='Choose reference genome going to be used')
+    parser.add_argument('-t', '--runtime', metavar="runtime", dest='time', type=int, default=60)
+    args = parser.parse_args()
+
+    omifile = args.omi
+    outdir = args.outdir
+    build=args.ref
+    sleeptime=args.time
+##    omifile = input("OMI file:")
+##    outdir = input("Output directory:")
+    fathmm(omifile,outdir,build,sleeptime)  
     
     
     
     
-    
+
+
+
+
+
+
+
+
+
+   
     

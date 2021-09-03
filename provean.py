@@ -11,7 +11,7 @@ MAX_DIST = 5000
 import bisect
 import pandas as pd
 import os
-
+import argparse
 def get_same_element_index(ob_list, word):
     return [i for (i, v) in enumerate(ob_list) if v == word]
 
@@ -19,11 +19,13 @@ intab = "ATCG"
 outtab = "TAGC"
 trantab = str.maketrans(intab, outtab)
 
-def annotation(unify,n=3):
+def annotation(unify,build,flat):
     dictionary= {} 
     position = 0
     chrom=''
     prechrom=0
+    flatpath,flatname=os.path.split(flat) 
+    seqpath,seqname=os.path.split(build)   
     
     for l in range(unify.shape[0]): #line in vcf:
         chrom=unify["chrom"][l]
@@ -47,10 +49,13 @@ def annotation(unify,n=3):
         ref_trip=[]
         var_trip=[]
         if chrom != prechrom:
-            f = open(r"D:\Personal materials\PhD\Oncominer\OP_program\ref_genome\\"+str(chrom)+'_hg38refFlat_2020.txt','r')
+            '''
+            Two file names can be adjusted accoding to their actual name after spliting.
+            '''
+            f = open(flatpath+str(chrom)+flatname,'r') 
             flat = f.readlines()
             f.close()
-            seqfile=open(r"D:\Personal materials\PhD\Oncominer\OP_program\ref_genome\genome_"+str(chrom)+".fa",'r')
+            seqfile=open(seqpath+"_"+str(chrom)+".fa",'r')
             next(seqfile)
             sequence=seqfile.read().replace('\n','')
             seqfile.close()
@@ -285,13 +290,26 @@ def annotation(unify,n=3):
     return dictionary   
 
 if __name__=='__main__': 
-    nonsynpath=input("nonsynonymous variants file:")
-    aaseqpath=input("directory to store amino acid sequence:")
-    aavarpath=input("directory to store amino acid variation:")
+    #nonsynpath=input("nonsynonymous variants file:")
+    #aaseqpath=input("directory to store amino acid sequence:")
+    #aavarpath=input("directory to store amino acid variation:")
+    parser = argparse.ArgumentParser(description='prepare for PROVEAN submission')
+    parser.add_argument('-i', '--input_file', metavar="DIRNAME", dest='nonsyn', required=True, help='Required: Input OMI file with nonsynonymous variants.')
+    parser.add_argument('-o', '--outseq_dir', metavar="DIRNAME", dest='seqdir', required=True, help='Required: Name of output directory to store aa sequence.')
+    parser.add_argument('-o', '--outvar_dir', metavar="DIRNAME", dest='vardir', required=True, help='Required: Name of output directory to store aa variations.')
+    parser.add_argument('-r', '--ref_sequence', metavar="ref_build", dest='ref_seq', required=True, help='Required: Reference sequence file used to translate aa,including path. Sequence should be split by chromosome.')
+    parser.add_argument('-f', '--ref_flat', metavar="ref_flat", dest='ref_flat', required=True, help='Required: Reference genomic field used to identify gene region,including path. File should be split by chromosome.')
+    args = parser.parse_args()
+
+    nonsynpath = args.nonsyn
+    aaseqpath = args.seqdir
+    aavarpath = args.vardir
+    build = args.ref_build 
+    flat = args.ref_flat
     
     nonsyn=pd.read_csv(nonsynpath)
     seqname=[]
-    result=annotation(nonsyn)
+    result=annotation(nonsyn,build,flat)
     for j in range(len(result)):
         nonsynidx=get_same_element_index(result[j][5],'Non-synonymous')
         for n in range(len(nonsynidx)):
