@@ -154,8 +154,8 @@ if __name__=='__main__':
     #cores = int(input("number of cores:"))
     parser = argparse.ArgumentParser(description='Process VCF files to generate OMI files')
     parser.add_argument('-i', '--input_dir', metavar="DIRNAME", dest='vcf_dir', required=True, help='Required: Input directory for all VCF files.')
-    parser.add_argument('-o', '--out_dir', metavar="DIRNAME", dest='outdir', required=True, help='Required: Name of output directory to store aa sequence.')
-    parser.add_argument('-f', '--ref_flat', metavar="ref_flat", dest='ref_flat', required=True, help='Required: Reference genomic field used to identify gene region,including path.')
+    parser.add_argument('-o', '--out_dir', metavar="DIRNAME", dest='outdir', required=True, help='Required: Name of output directory to store result files.')
+    parser.add_argument('-f', '--ref_flat', metavar="REFFLAT", dest='ref_flat', required=True, help='Required: Reference genomic field used to identify gene region,including path.')
     parser.add_argument('-c', '--num_cores', metavar="NUMCORES", dest='cores', type=int,default=3)
     args = parser.parse_args()
 
