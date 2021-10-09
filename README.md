@@ -24,3 +24,8 @@ provean.py takes nonsynonymous variants and generate sequences files and variati
 (3) -v --outvar_dir: folder to store all amino acid variations.
 (4) -r --ref_sequence: reference sequence file used to translate aa,including path.
 (5) -f --ref_flat: reference genomic field used to identify gene region,including path.
+
+pathogenic_scores.py takes takes nonsynonymous variants file (containing subject counts, FATHMM and PROVEAN scores obtained above), a refflat file and path+name for output file. It will group variants by genes and calculate an integrative pathogenic score for each gene.
+(1) -t --input_dir:full path to nonsynonymous variants files.
+(2) -f --ref_flat: full path to the refflat file, including the file name.
+(3) -o --out_dir: path and name of output file.
