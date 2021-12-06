@@ -312,28 +312,29 @@ if __name__=='__main__':
     result=annotation(nonsyn,build,flat)
     for j in range(len(result)):
         nonsynidx=get_same_element_index(result[j][5],'Non-synonymous')
-        for n in range(len(nonsynidx)):
-            varfile=open(aavarpath+result[j][3][nonsynidx[n]]+".var", "a")     
-            #varfile.write(result[j][6][n]+"\n")
-            varfile.write(nonsyn['AAchange'][j][nonsynidx[n]])
-            varfile.close() 
-            if result[j][3][nonsynidx[n]] not in seqname:
-                seqname.append(result[j][3][nonsynidx[n]])
-                if result[j][2][nonsynidx[n]]=='-':               
-                    geneseq=result[j][6][n].upper().translate(trantab)   
-                else:
-                    geneseq=result[j][6][n].upper()
-                aaseq=''
-                for i in range(0,len(geneseq),3):
-                    if len(geneseq)>=i+3 and AADict[geneseq[i:i+3]]!='*':
-                        aaseq=aaseq+AADict[geneseq[i:i+3]]
+        if len(nonsynidx)>0:
+            for n in range(len(nonsynidx)):
+                varfile=open(aavarpath+result[j][3][nonsynidx[n]]+".var", "a")     
+                #varfile.write(result[j][6][n]+"\n")
+                varfile.write(nonsyn['AAchange'][j][nonsynidx[n]])
+                varfile.close() 
+                if result[j][3][nonsynidx[n]] not in seqname:
+                    seqname.append(result[j][3][nonsynidx[n]])
+                    if result[j][2][nonsynidx[n]]=='-':               
+                        geneseq=result[j][6][n].upper().translate(trantab)   
                     else:
-                        break
-                aaseq=re.sub("(.{60})","\\1\n",aaseq)
-                output=open(aaseqpath+result[j][3][nonsynidx[n]]+".fasta", "w")
-                output.write("> sp|" + result[j][3][nonsynidx[n]] + "\n")
-                output.write(aaseq)
-                output.close()
+                        geneseq=result[j][6][n].upper()
+                    aaseq=''
+                    for i in range(0,len(geneseq),3):
+                        if len(geneseq)>=i+3 and AADict[geneseq[i:i+3]]!='*':
+                            aaseq=aaseq+AADict[geneseq[i:i+3]]
+                        else:
+                            break
+                    aaseq=re.sub("(.{60})","\\1\n",aaseq)
+                    output=open(aaseqpath+result[j][3][nonsynidx[n]]+".fasta", "w")
+                    output.write("> sp|" + result[j][3][nonsynidx[n]] + "\n")
+                    output.write(aaseq)
+                    output.close()
        
     output=open(aavarpath+"name.txt",'w')
     for ele in seqname:
