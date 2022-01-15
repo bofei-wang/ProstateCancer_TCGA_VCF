@@ -214,10 +214,10 @@ def annotation(unify,build,flat):
                                 ex-=1
                         if cd_end > ex_ends[ex]:
                             m=(ex_ends[ex] - position + m)%3
-                            aapos+=(ex_ends[ex]-position)                          
+                            aapos+=(ex_ends[ex]-position+1)                          
                         else:
                             m=(cd_end - position + m)%3
-                            aapos+=(cd_end-position)
+                            aapos+=(cd_end-position+1)
                             
                         if aapos%3==0:
                             pos=aapos//3
