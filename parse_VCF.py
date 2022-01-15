@@ -256,10 +256,10 @@ def vcf_func(vcffile,gtf,genome):
                                             ex-=1
                                     if cd_end > ex_ends[ex]:
                                         m=(ex_ends[ex] - position +m)%3
-                                        aalength+=(ex_ends[ex]-position)
+                                        aalength+=(ex_ends[ex]-position+1)
                                     else:
                                         m=(cd_end - position + m)%3
-                                        aalength+=(cd_end-position)
+                                        aalength+=(cd_end-position+1)
                                     if aalength%3==0:
                                         aapos=aalength//3
                                     else:
